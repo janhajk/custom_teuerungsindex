@@ -1,0 +1,6 @@
+;$Id$
+name = "Teuerungsindex Bericht"
+description = "Erstellt den Teuerungsindex-Bericht für das ASTRA"
+core = 6.x
+php = 5.2
+package = "Custom Modules"

@@ -1,0 +1,92 @@
+<?php
+
+/*
+ * Implementation of hook_menu()
+ */
+function custom_teuerungsindex_menu() {
+  $items = array();
+
+  $items['teuerungsindex'] = array(
+    'title' => 'Bericht ASTRA: Teuerungsindex',
+    'description' => 'Erstellt den Bericht mit den Teuerungsindizes der Verträge für das ASTRA',
+    'page callback' => '_custom_teuerungsindex_erstellen',
+    'access arguments' => array('ASTRA Bericht Teuerungsindex erstellen'),
+    'type' => MENU_SUGGESTED_ITEM,
+  );
+  return $items;
+}
+
+/*
+ * implementation of hook_perm()
+ */
+function custom_teuerungsindex_perm() {
+  return array('ASTRA Bericht Teuerungsindex erstellen');
+}
+
+/*
+ * Form zum erstellen des Berichtes
+ */
+function _custom_teuerungsindex_erstellenform($form_state) {
+	$form = array();
+	$form['evl'] = array(
+		'#type' => 'fieldset',
+		'#title' => 'EVL',
+		'#collapsible' => FALSE,
+	);
+	$form['evl']['auswahl'] = array(
+		'#type' => 'select',
+		'#title' => 'W&auml;hlen Sie die EVL aus die verwendet werden soll',
+		'#options' => _custom_teuerungsindex_getevls(),
+		'#description' => 'So laden Sie eine EVL auf die Plattform: Aktuelle EVL in Excel &ouml;ffnen, alle Spalten mit ' .
+				'Geldbetr&auml;gen ausw&auml;hlen und von W&auml;hrungsformat nach Dezimalformat mit zwei ' .
+				'Nachkommastellen umformatieren. Speichern unter... als Format .csv ausw&auml;hlen. Danach' .
+				' die Datei auf der Plattform normal hochladen. Als Dokumentendatum das Datum der Liste nehmen. ' .
+				'Bei Dateityp "EVL" ausw&auml;len. Fertig!'
+	);
+	$form['stichtag'] = array(
+		'#type' => 'date',
+		'#title' => 'Stichtag',
+		'#required' => TRUE,
+		'#description' => 'Der Stichtag welcher f&uuml;r den Bericht verwendet werden soll.',
+	);
+	$form['submit'] = array('#type' => 'submit', '#value' => t('Bericht erstellen'));
+	return $form;
+}
+
+/*
+ * wird aufgerufen, wenn der Button "Bericht erstellen" gedrückt wurde 
+ */
+function _custom_teuerungsindex_erstellenform_submit($form, &$form_state) {
+	include_once('lib/evlimporter.php');
+	include_once('custom_teuerungsindex.pdf.php');
+	
+	// EVL-Liste laden
+	$listendatum = $form['evl']['auswahl']['#options'][$form['evl']['auswahl']['#value']];
+	$EVL = new EVL($form['evl']['auswahl']['#value'], $listendatum);
+	
+	// EVL-Liste an PDF-Generator senden und ausgeben
+	$stichtag = date('Y-m-d',mktime(0,0,0,$form['stichtag']['month']['#value'],$form['stichtag']['day']['#value'],$form['stichtag']['year']['#value']));
+  //print '<pre>'.print_r($EVL->getArray($stichtag),1).'</pre>';
+	$pdf = new indexpdf($EVL->getArray($stichtag));
+	$pdf->Output();
+}
+
+/*
+ * gibt alle EVL Dateien zurück
+ * pfad => Datum
+ */
+function _custom_teuerungsindex_getevls() {
+	$o = array();
+	$results = db_query('SELECT distinct nid FROM term_node WHERE tid = 221 ORDER BY nid DESC');
+	while ($r = db_fetch_object($results))
+		$o[node_load($r->nid)->field_hplbl_file[0]['filepath']] = date('Y-m-d',strtotime(node_load($r->nid)->field_hplbl_dokumentendatum[0]['value']));
+	return $o;
+}
+
+/*
+ * Callback für hook_menu(); gibt Formular zurück zur
+ * Erstellung des Berichts
+ */
+function _custom_teuerungsindex_erstellen() {
+	return drupal_get_form('_custom_teuerungsindex_erstellenform');
+}
