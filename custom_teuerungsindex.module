@@ -60,13 +60,6 @@ function _custom_teuerungsindex_erstellenform_submit($form, &$form_state) {
     // Bereits geschrieben Header-Bytes löschen
     //ob_clean();
     ini_set("zlib.output_compression", "Off");
-    require_once('tcpdf/tcpdf.php');
-    $pdf = new TCPDF();
-    $pdf->AddPage();
-    $pdf->writeHTMLCell(0, 0, '', '', 'test', 0, 1, 0, true, '', true);
-    $pdf->Output('example.pdf', 'I');
-    module_invoke_all('exit');
-    exit();
 
 	include_once('evlimporter.php');
 	include_once('custom_teuerungsindex.pdf.php');
