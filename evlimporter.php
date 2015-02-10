@@ -52,7 +52,7 @@ class EVL {
 		$this->pfad = $pfad;
 		$this->schemaid = $this->getSchemaIdFromDate($stichtag);
 		//cell separator, row separator, value enclosure
-		$csv = new CSV(';', "\r\n", '"');	
+		$csv = new CSV(';', "\r\n", '"');
 		//parse the string content
 		$csv->setContent(file_get_contents($pfad));	
 		//returns an array with the CSV data
@@ -63,7 +63,7 @@ class EVL {
 
 		foreach ($csvcontent as $row) {
 			if(substr($row[5],0,3) != 'HPL') continue; // Nur Projekt HPL aus Vertragsliste lesen
-			
+
 			// Clean the Import-Values
 			foreach ($this->schema['evlcols'] as $col) {
 				switch ($col['type']) {
@@ -80,8 +80,8 @@ class EVL {
 			//dsm($sql);
 			db_query($sql);
 		}
-	}	
-	
+	}
+
 	/*
 	 * Gibt die EVL als geordnetes Array zurück
 	 * macht auch einige Berechnungen und fügt diese
@@ -93,17 +93,17 @@ class EVL {
 	 * 		-- #1 etc.
 	 */
 	public function getArray($stichtag) {
-		
+
 		// Wenn bereits gecached, dann direkt ausgeben
-		if (count($this->data)) return $this->data;		
-		
+		if (count($this->data)) return $this->data;
+
 		// Offertendatum wenn leer auf Vertragsdatum setzten
 		$results = db_query("UPDATE evl_gesamt SET angebotsdatum = datum WHERE zeilenbeschrieb LIKE 'H' AND angebotsdatum = '0000-00-00'");
 		// Leere Hauptverträge löschen (es gibt z.T. doppelte HV mit v_summe = 0 welche sonst die richtigen überschreiben)
 		//$results = db_query("DELETE FROM evl_gesamt WHERE zeilenbeschrieb = 'H' AND v_summe = '0'");
 		// Hauptverträge ohne Vertragsdatum löschen
 		$results = db_query("DELETE FROM evl_gesamt WHERE zeilenbeschrieb = 'H' AND datum = '0000-00-00'");
-		
+
 		// Alle Eintraege nach Stichtag loeschen
 		//
 		$v = array();
@@ -122,17 +122,17 @@ class EVL {
 		 }
 		 if (!$i) { db_query("DELETE FROM evl_gesamt WHERE vertragsnummer = '".$vertragsnummer."'");}
 		}
-		
+
 		// Rechnungen nach Stichtag alle loeschen
 		$results = db_query("DELETE FROM evl_gesamt WHERE rechnungsdatum > '".$stichtag."' AND zeilenbeschrieb LIKE 'R'");
 
-    // Rechnungen ohne Weiterleitungsdatum loeschen (Dies betrifft ganz neue Rechnungen)
+        // Rechnungen ohne Weiterleitungsdatum loeschen (Dies betrifft ganz neue Rechnungen)
 		//$results = db_query("DELETE FROM evl_gesamt WHERE weiterleitunganrw = '0000-00-00' AND zeilenbeschrieb LIKE 'R'");
-		
+
 		// Bestimmte Vertraege loeschen
 		$results = db_query("DELETE FROM evl_gesamt WHERE vertragsnummer = 901322 OR vertragsnummer = 901323 OR vertragsnummer = 901134");
     $results = db_query("DELETE FROM evl_gesamt WHERE v_summe < 0 OR rechnungsbetrag < 0");
-		
+
 		// Alle Hauptverträge
 		$k = array();
 		$results = db_query("SELECT * FROM evl_gesamt WHERE v_summe != 0 AND zeilenbeschrieb LIKE 'H' ORDER BY angebotsdatum ASC");
@@ -149,7 +149,7 @@ class EVL {
 			$k[$r['vertragsnummer']]['mehrminderkosten_ohne_mwst'] = $r['v_summe']/(1+$mwst);
 			$k[$r['vertragsnummer']]['za']                         = array();
 			$k[$r['vertragsnummer']]['rechnungen']                 = array();
-			
+
 		}
 		// Alle Zusatzaufträge
 		$results = db_query("SELECT * FROM evl_gesamt WHERE za_summe != 0 AND zeilenbeschrieb LIKE 'ZA' ORDER BY zanr ASC");
@@ -176,17 +176,17 @@ class EVL {
 			$k[$r['vertragsnummer']]['rechnungs_total_ohne_mwst']   += $r['rechnungsbetrag']/(1+$mwst);
 			$k[$r['vertragsnummer']]['mehrminderkosten_ohne_mwst']  -= $r['rechnungsbetrag']/(1+$mwst);
 		}
-		
+
 		// Rechnungstotal (KC3)
 		$rechnungstotal = array('mit_mwst'=>0, 'ohne_mwst'=>0);
 		foreach ($k as $vertragsnummer=>$vertrag) {
 			$rechnungstotal['mit_mwst']  += $vertrag['rechnungs_total'];
 			$rechnungstotal['ohne_mwst'] += $vertrag['rechnungs_total_ohne_mwst'];
 		}
-		
+
 		// Rechnungs-MwsT (KC6)
 		$rechnungstotal['delta'] = $rechnungstotal['mit_mwst'] - $rechnungstotal['ohne_mwst'];
-		
+
 		// In Rechnung gestellte Vertragsteuerung exkl Mwst (KC4)
 		$vertragsteuerung = 0;
 		foreach ($k as $vertragsnummer=>$vertrag) {
@@ -202,16 +202,16 @@ class EVL {
         unset($k[$vertragsnummer]);
       }
     }
-		
+
 		$bonus = array(
 			'vertragsteuerung' => $vertragsteuerung,
 		);
-		
+
 		$this->data = array('v'=>$k,'stichtag'=>$stichtag, 'rechnungstotal'=>$rechnungstotal, 'bonus'=>$bonus);
-		//unset($this->data['v']); print "<pre>"; print_r($this->data); print '</pre>'; exit();
+		unset($this->data['v']); print "<pre>"; print_r($this->data); print '</pre>'; exit();
 		return $this->data;
 	}
-	
+
 	/**
 	 * Gibt die Schema-Id anhand eines Datums zurück
 	 * Diese müssen beim Erstellen eines neuen Schemas hier gesetzt werden
@@ -252,7 +252,7 @@ class EVL {
 		return $values;
 	}
 	
-	/*
+/*
 	 * erstellt das Schema der EVL mit Spalten
 	 */
 	private function CreateSchema($schemaid=1) {
@@ -278,7 +278,7 @@ class EVL {
 		$this->schemaAddEVLCol('sr',                       'date',  false, '0000-00-00');
 		$this->schemaAddEVLCol('angebotsdatum',            'date',  false, '0000-00-00');
     $this->schemaAddEVLCol('mwst',                     'float', false, '');
-		
+
 		switch ($schemaid) {
 			case 1:
 				$this->schemaAddColId('B','art');
@@ -300,7 +300,7 @@ class EVL {
 				$this->schemaAddColId('W','vertragserfuellungsdatum');
 				$this->schemaAddColId('X','sr');
 				$this->schemaAddColId('AB','angebotsdatum');
-        $this->schemaAddColId('AC','mwst');
+                $this->schemaAddColId('AC','mwst');
 			break;
 			case 2:
 				// add new Schema here
@@ -441,7 +441,7 @@ class EVL {
       901530 => 0.000001,
       901759 => 0.000001,
 
-        
+
     );
     if (array_key_exists($v,$e)) {
       return ($e[$v]/100);

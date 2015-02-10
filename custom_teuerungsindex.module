@@ -54,19 +54,19 @@ function _custom_teuerungsindex_erstellenform($form_state) {
 }
 
 /*
- * wird aufgerufen, wenn der Button "Bericht erstellen" gedrückt wurde 
+ * wird aufgerufen, wenn der Button "Bericht erstellen" gedrückt wurde
  */
 function _custom_teuerungsindex_erstellenform_submit($form, &$form_state) {
-	include_once('lib/evlimporter.php');
+	include_once('evlimporter.php');
 	include_once('custom_teuerungsindex.pdf.php');
-	
+
 	// EVL-Liste laden
 	$listendatum = $form['evl']['auswahl']['#options'][$form['evl']['auswahl']['#value']];
 	$EVL = new EVL($form['evl']['auswahl']['#value'], $listendatum);
-	
+
 	// EVL-Liste an PDF-Generator senden und ausgeben
 	$stichtag = date('Y-m-d',mktime(0,0,0,$form['stichtag']['month']['#value'],$form['stichtag']['day']['#value'],$form['stichtag']['year']['#value']));
-  //print '<pre>'.print_r($EVL->getArray($stichtag),1).'</pre>';
+    //print '<pre>'.print_r($EVL->getArray($stichtag),1).'</pre>';
 	$pdf = new indexpdf($EVL->getArray($stichtag));
 	$pdf->Output();
 }

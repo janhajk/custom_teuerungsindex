@@ -8,32 +8,36 @@
  * Input ist die Erweiterte Vertragsliste als Arra
  * y-Wert, wie er von der Klasse "EVL" ausgegeben
  * werden kann.
- * Pdf-Ersteller ist das Programm "tcpdf" 
+ * Pdf-Ersteller ist das Programm "tcpdf"
  */
- 
+
  // TCPDF laden
-include_once('lib/tcpdf/config/lang/ger.php');
-include_once('lib/tcpdf/tcpdf.php');
+include_once('tcpdf/config/lang/ger.php');
+include_once('tcpdf/tcpdf.php');
 
 /**
  * die Klasse indexpdf
+ * erstellt ein PDF mit dem Bericht; nimmt als input $data mit allen Verträgen
+ * als geordnetes Array und de 'stichtag' als Stichtag für den Bericht
  */
+
 class indexpdf {
 	var $pdf;								// Das PDF-Objekt
 	var $summe_periode = array();			// Die Vertragssummen pro Periode
-	var $summe_periode_teuerung = array();	// Die Teuerungs-Summen pro Periode	
+	var $summe_periode_teuerung = array();	// Die Teuerungs-Summen pro Periode
 	var $stichtag = '0000-00-00';			// Stichtag der EVL Tabelle
 	var $cur_index = 1;						// Aktueller Index-Zähler
 	var $cur_periode = 0;					// Aktueller Perioden-Zähler
-	
-	
+
+
 	/*
 	 * Konstruktor
+	 * @param array $data enthält im Eingang index 'stichtag' und 'v' mit allen Verträgen
 	 */
 	function __construct($data) {
 		// Der Stichtag des EVL-Liste (wird in Kopfzeile geschrieben)
 		$this->stichtag = $data['stichtag'];
-		
+
 		// neues PDF Objekt anlegen
 		$this->pdf = new teuerungsindex_PDF('P','mm','A4');
 		$this->pdf->AliasNbPages();  // Muss aufgerufen werden, damit Seitennummerierung erfolgt
@@ -363,11 +367,17 @@ class teuerungsindex_PDF extends TCPDF {
 		$this->SetFont('helvetica','',9);$this->Text(17,101,'Basiszeitpunkt');
 		$this->SetFont('helvetica','',9);$this->Text(140,101,'Apr. 2005');
 	}
-	// Fusszeile
+
+    // Fusszeile
 	function footer() {
 		// Dokumentenname
-		$this->SetFont('helvetica','',8);$this->SetXY(17,286);$this->MultiCell(90,5,'Do_'.date("Y-m-d_H-i",time()).'.pdf',0,'L');
+		$this->SetFont('helvetica','',8);
+        $this->SetXY(17,286);
+        $this->MultiCell(90,5,'Do_'.date("Y-m-d_H-i",time()).'.pdf',0,'L');
+
 		// Druckdatum, Seite von / bis
-		$this->SetFont('helvetica','',8);$this->SetXY(107,286);$this->MultiCell(88,5,'Druckdatum: '.date('d.m.Y',time()).'          Seite '.$this->PageNo().'/{nb}',0,'R');		
+		$this->SetFont('helvetica','',8);
+        $this->SetXY(107,286);
+        $this->MultiCell(88,5,'Druckdatum: '.date('d.m.Y',time()).'          Seite '.$this->PageNo().'/{nb}',0,'R');
 	}
 }
