@@ -65,7 +65,7 @@ function _custom_teuerungsindex_erstellenform_submit($form, &$form_state) {
     $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
     $pdf->AddPage();
     $pdf->writeHTMLCell(0, 0, '', '', 'test', 0, 1, 0, true, '', true);
-    $pdf->Output('example_001.pdf', 'S');
+    $pdf->Output('example_001.pdf', 'D');
     $GLOBALS['devel_shutdown'] = FALSE;
     //module_invoke_all('exit');
     exit();
