@@ -242,7 +242,7 @@ class indexpdf {
 		return array(
 			1 => array('von'=>'1995-01-01','bis'=>'1998-09-30', 'titel'=>'NEAT Teuerungsindex',                                 'Basisindex'=>119.8),
 			2 => array('von'=>'1998-10-01','bis'=>'2005-03-31', 'titel'=>'Schweizer Baupreisindex - Tiefbau - Nordwestschweiz', 'Basisindex'=>98.0),
-			3 => array('von'=>'2005-04-01','bis'=>'2099-12-31', 'titel'=>'Schweizer Baupreisindex - Tiefbau - Nordwestschweiz', 'Basisindex'=>100.0),
+			3 => array('von'=>'2005-04-01','bis'=>'2015-12-31', 'titel'=>'Schweizer Baupreisindex - Tiefbau - Nordwestschweiz', 'Basisindex'=>100.0),
 		);
 	}
 
@@ -284,7 +284,8 @@ class indexpdf {
             33 => array('von'=>'2013-04-01', 'bis'=>'2013-09-30', 'index'=>112.45, 'periode'=>3),
             34 => array('von'=>'2013-10-01', 'bis'=>'2014-03-31', 'index'=>114.08, 'periode'=>3),
             35 => array('von'=>'2014-04-01', 'bis'=>'2014-09-30', 'index'=>116.22, 'periode'=>3),
-            36 => array('von'=>'2014-10-01', 'bis'=>'2015-12-31', 'index'=>117.45, 'periode'=>3),
+            36 => array('von'=>'2014-10-01', 'bis'=>'2015-03-31', 'index'=>117.45, 'periode'=>3),
+            37 => array('von'=>'2015-04-01', 'bis'=>'2015-09-30', 'index'=>117.45, 'periode'=>3),
         );
     }
 
