@@ -46,7 +46,7 @@ class EVL {
 	var $schema = array();
 	var $stichtag = '0000-00-00';
 	var $data = array();
-	
+
 	public function __construct($pfad, $stichtag='0000-00-00') {
 		$this->stichtag = $stichtag;
 		$this->pfad = $pfad;
@@ -197,19 +197,20 @@ class EVL {
 			}
 		}
 
-    foreach ($k as $vertragsnummer=>$vertrag) {
-      if (!isset($vertrag['vertragsnummer'])) {
-        unset($k[$vertragsnummer]);
-      }
-    }
+        foreach ($k as $vertragsnummer=>$vertrag) {
+            if (!isset($vertrag['vertragsnummer'])) {
+                unset($k[$vertragsnummer]);
+            }
+        }
 
-		$bonus = array(
-			'vertragsteuerung' => $vertragsteuerung,
-		);
+        $bonus = array(
+            'vertragsteuerung' => $vertragsteuerung,
+        );
 
-		$this->data = array('v'=>$k,'stichtag'=>$stichtag, 'rechnungstotal'=>$rechnungstotal, 'bonus'=>$bonus);
-		unset($this->data['v']); print "<pre>"; print_r($this->data); print '</pre>'; exit();
-		return $this->data;
+        $this->data = array('v'=>$k,'stichtag'=>$stichtag, 'rechnungstotal'=>$rechnungstotal, 'bonus'=>$bonus);
+        //unset($this->data['v']); print "<pre>"; print_r($this->data); print '</pre>'; exit();
+        print '<pre>'.print_r($this->data,1).'</pre>'; exit();
+        return $this->data;
 	}
 
 	/**
