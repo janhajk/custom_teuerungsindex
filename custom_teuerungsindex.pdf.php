@@ -339,7 +339,7 @@ class indexpdf {
 class teuerungsindex_PDF extends TCPDF {
 	// Kopfzeile
 	function header() {
-		//$this->Image((dirname(__FILE__)).'/chlogo.png',17,5,70,0,'PNG','','T',true);
+		$this->Image((dirname(__FILE__)).'/chlogo.png',17,5,70,0,'PNG','','T',true);
 		$this->SetFont('helvetica','B',14);$this->Text(17,30,'Infrastrukturfonds');
 		$this->SetFont('helvetica','B',11);$this->Text(17,39,'Berechnung / Nachweis Vergaben + Vorvertragssteuerung');
 		$this->SetFont('helvetica','B',11);$this->Text(17,47,'Kennzahl KC1 / KC2 aus Kennzahlenreporting Teil C Kostencontrolling');
