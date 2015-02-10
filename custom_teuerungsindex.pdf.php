@@ -131,8 +131,6 @@ class indexpdf {
 	 * Diese Methode gibt das PDF aus
 	 */
 	public function Output() {
-		// Bereits geschrieben Header-Bytes löschen
-		ob_clean();
 		// PDF ausgeben
 		$this->pdf->Output('Do_'.date('Y-m-d_H-i',time()).'.pdf','D');
 		// Script abbrechen, damit Drupal nicht versucht weiteren Code auszuführen
