@@ -59,7 +59,7 @@ function _custom_teuerungsindex_erstellenform($form_state) {
 function _custom_teuerungsindex_erstellenform_submit($form, &$form_state) {
     // Bereits geschrieben Header-Bytes löschen
     ob_clean();
-
+    ini_set("zlib.output_compression", "Off");
     require_once('tcpdf/tcpdf.php');
     $pdf = new TCPDF();
     $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
