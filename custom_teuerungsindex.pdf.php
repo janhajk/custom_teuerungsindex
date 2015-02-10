@@ -53,78 +53,7 @@ class indexpdf {
 		$this->cur_periode = 0;
 		$cur_page = 0;
 		// Durch alle HV gehen
-		foreach ($data['v'] as $hv) {
-			// Wenn auf neuer Seite dann Header-Variablen ausfüüllen
-			if ($cur_page != $this->pdf->PageNo()) {
-				$this->fillOutHeader();
-				$cur_page = $this->pdf->PageNo();
-				$this->pdf->SetFont('helvetica','',7);
-			}
-			$datum = ($hv['angebotsdatum'] != '0000-00-00')?$hv['angebotsdatum']:$hv['datum'];
-			if (!isset($this->summe_periode[$this->cur_periode])) $this->summe_periode[$this->cur_periode] = 0;
-			if (!isset($this->summe_index[$this->cur_index])) $this->summe_index[$this->cur_index] = 0;
-			while ($this->is_new_periode($datum)) {
-				$this->LinePeriode($this->cur_periode);
-				$this->cur_periode++;
-			}
-			if ($datum > $astraINDEXE[$this->cur_index]['bis']) { $this->WriteTotalIndex(); $this->pdf->AddPage(); $this->cur_index++; }
-			$this->pdf->Cell(16,4,date('d.m.Y',strtotime($datum)),0,0,'L',1);
-			$this->pdf->Cell(13,4,$hv['vertragsnummer'],0,0,'L',1);
-			$this->pdf->Cell(24,4,$this->cut($hv['kreditor'],35),0,0,'L',1);
-			$this->pdf->Cell(34,4,$this->cut($hv['auftragsbezeichnung'],35),0,0,'L',1);
-			$this->pdf->Cell(25,4,$this->CHF($hv['v_summe_ohne_mwst']),0,0,'R',1);
-			$this->summe_periode[$this->cur_periode] += $this->Rappen($hv['v_summe_ohne_mwst']);
-			$this->summe_index[$this->cur_index]     += $this->Rappen($hv['v_summe_ohne_mwst']);
-			$this->pdf->Ln();
-			// ZA's
-			if (count($hv['za'])) {
-				$this->pdf->Cell(16,4,'',0,0,'L',1);
-				$this->pdf->Cell(13,4,'',0,0,'L',1);
-				$this->pdf->Cell(24,4,'Nachtrag',0,0,'L',1);
-				$this->pdf->Cell(34,4,'',0,0,'L',1);
-				$this->pdf->Cell(25,4,$this->CHF($hv['za_summe_total_ohne_mwst']),0,0,'R',1);
-				$this->summe_periode[$this->cur_periode] += $this->Rappen($hv['za_summe_total_ohne_mwst']);
-				$this->summe_index[$this->cur_index]     += $this->Rappen($hv['za_summe_total_ohne_mwst']);
-				$this->pdf->Ln();
-			}
-			if (($hv['sr'] != '0000-00-00' && $this->Rappen($hv['mehrminderkosten']) != 0) || $this->Rappen($hv['mehrminderkosten']) < 0) {
-				//if ($this->CHF((-$hv['mehrminderkosten_ohne_mwst'])) == '406.55') print_r($hv);
-				$this->pdf->Cell(16,4,'',0,0,'L',1);
-				$this->pdf->Cell(13,4,'',0,0,'L',1);
-				$this->pdf->Cell(24,4,($hv['mehrminderkosten']<0)?'Mehrkosten':'Minderkosten',0,0,'L',1);
-				$this->pdf->Cell(34,4,'',0,0,'L',1);
-				$this->pdf->Cell(25,4,$this->CHF((-$hv['mehrminderkosten_ohne_mwst'])),0,0,'R',1);
-				$this->summe_periode[$this->cur_periode] += $this->Rappen(-$hv['mehrminderkosten_ohne_mwst']);
-				$this->summe_index[$this->cur_index] 	 += $this->Rappen(-$hv['mehrminderkosten_ohne_mwst']);
-				$this->pdf->Ln();
-			}
-		}
-		$this->LinePeriode($this->cur_periode);
-		$this->WriteTotalIndex();
-		$this->fillOutHeader();
-		$this->pdf->AddPage();
-		// KC1 und KC2 ausgeben
-        // KC1: Vertragssumme ohne MWST
-        // KC2: Vorvertragsteuerung
-		$ttotal = 0;
-		foreach ($this->summe_index as $sum) {
-			$ttotal += $sum;
-		}
-		$this->pdf->Cell(50,5,'KC1: '.$this->CHF($ttotal));$this->pdf->Ln();
-		$ttotal = 0;
-		foreach ($this->summe_periode_teuerung as $sum) {
-			$ttotal += $sum;
-		}
-		$this->pdf->Cell(50,5,'KC2: '.$this->CHF($ttotal));$this->pdf->Ln();
-
-		// KC 3
-		$this->pdf->Cell(50,5,'KC3: '.$this->CHF($data['rechnungstotal']['ohne_mwst']));$this->pdf->Ln();
-
-		// KC 4
-		$this->pdf->Cell(50,5,'KC4: '.$this->CHF($data['bonus']['vertragsteuerung']));$this->pdf->Ln();
-
-		// KC 6
-		$this->pdf->Cell(50,5,'KC6: '.$this->CHF($data['rechnungstotal']['mit_mwst']-$data['rechnungstotal']['ohne_mwst']));$this->pdf->Ln(); 
+		
 	}
 
 	/*

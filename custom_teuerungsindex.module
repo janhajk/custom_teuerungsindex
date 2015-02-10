@@ -59,6 +59,7 @@ function _custom_teuerungsindex_erstellenform($form_state) {
 function _custom_teuerungsindex_erstellenform_submit($form, &$form_state) {
     // Bereits geschrieben Header-Bytes löschen
     ob_clean();
+    ob_end_flush();
 	include_once('evlimporter.php');
 	include_once('custom_teuerungsindex.pdf.php');
 
