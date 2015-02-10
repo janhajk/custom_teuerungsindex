@@ -41,11 +41,11 @@ class indexpdf {
 		$this->pdf->SetFillColor(255,255,255);
 		$this->pdf->SetMargins(15,110,15);	// Ränder
 		$this->pdf->AddPage(); // erste Seite anlegen
-		
+
 		// Index und Perioden Daten
 		$astraINDEXE = $this->Indexe();
 		$astraperiode = $this->Perioden();
-		
+
 		$this->cur_periode = 0;
 		$cur_page = 0;
 		// Durch alle HV gehen
@@ -100,8 +100,8 @@ class indexpdf {
 		$this->fillOutHeader();
 		$this->pdf->AddPage();
 		// KC1 und KC2 ausgeben
-    // KC1: Vertragssumme ohne MWST
-    // KC2: Vorvertragsteuerung
+        // KC1: Vertragssumme ohne MWST
+        // KC2: Vorvertragsteuerung
 		$ttotal = 0;
 		foreach ($this->summe_index as $sum) {
 			$ttotal += $sum;
@@ -112,23 +112,23 @@ class indexpdf {
 			$ttotal += $sum;	
 		}
 		$this->pdf->Cell(50,5,'KC2: '.$this->CHF($ttotal));$this->pdf->Ln();
-		
+
 		// KC 3
 		$this->pdf->Cell(50,5,'KC3: '.$this->CHF($data['rechnungstotal']['ohne_mwst']));$this->pdf->Ln();
-		
+
 		// KC 4
 		$this->pdf->Cell(50,5,'KC4: '.$this->CHF($data['bonus']['vertragsteuerung']));$this->pdf->Ln();
-		
+
 		// KC 6
 		$this->pdf->Cell(50,5,'KC6: '.$this->CHF($data['rechnungstotal']['mit_mwst']-$data['rechnungstotal']['ohne_mwst']));$this->pdf->Ln(); 
 	}
-	
+
 	/*
 	 * Diese Methode gibt das PDF aus
 	 */
 	public function Output() {
 		// Bereits geschrieben Header-Bytes löschen
-		ob_clean();		
+		ob_clean();
 		// PDF ausgeben
 		$this->pdf->Output('Do_'.date("Y-m-d_H-i",time()).'.pdf','D');
 		// Script abbrechen, damit Drupal nicht versucht weiteren Code auszuführen
@@ -136,12 +136,12 @@ class indexpdf {
 		module_invoke_all('exit');
 		exit();
 	}
-	
+
 	/*
 	 * Passt den PDF-Header an
-	 * 
+	 *
 	 * Da man mit TCPDF nur eine statische Kopfzeile in das PDF
-	 * einfügen kann werden die Variablen, welche sich im 
+	 * einfügen kann werden die Variablen, welche sich im
 	 * Header befinden manuell nach einem Seitenwechsel
 	 * in der PDF Kopfzeile eingefügt.
 	 */
@@ -150,7 +150,7 @@ class indexpdf {
 		// Aktuelle Koordinaten
 		$x = $this->pdf->getX();
 		$y = $this->pdf->getY();
-		
+
 		// Stichag EVL-Liste
 		$this->pdf->SetFont('helvetica','B',11);
 		$this->pdf->Text(160,37,'Stand: '.$this->DateSql2de($this->stichtag));
@@ -168,17 +168,17 @@ class indexpdf {
 		$this->pdf->SetFont('helvetica','',9);
 		$text = sprintf("%01.1f",$astraINDEXE[$this->cur_index]['Basisindex']);
 		$this->pdf->Text(129,101,$text);
-		
+
 		// Koordinaten auf Ursprungsposition zurücksetzten
 		$this->pdf->setXY($x,$y);
 	}
-	
+
 	/*
 	 * erstellt das Total je Periode
 	 */
 	private function LinePeriode($periode) {
 		$astraINDEXE = $this->Indexe();
-		$astraperiode = $this->Perioden();		
+		$astraperiode = $this->Perioden();
 		$total = $this->summe_periode[$periode];
 		$basisindex = $astraINDEXE[$astraperiode[$periode]['periode']]['Basisindex'];
 		$index = $astraperiode[$periode]['index'];
@@ -193,7 +193,7 @@ class indexpdf {
 		$this->pdf->Ln(6);
 		$this->summe_periode_teuerung[$periode] = $vorvertragsteuerung;
 	}
-	
+
 	/*
 	 * erstellt das Total je Index
 	 */
@@ -201,17 +201,16 @@ class indexpdf {
 		$this->pdf->Ln();
 		$total = 0;
 		$total_teuerung = 0;
-		
+
 		$astraperiode = $this->Perioden();
-		
+
 		foreach ($astraperiode as $index=>$periode) {
 			if($periode['periode'] == $this->cur_index) {
 				$total += $this->summe_periode[$index];
 				$total_teuerung += $this->summe_periode_teuerung[$index];
-				
-			}
+}
 		}
-				
+
 		// Total-Zeile ungerundet bzw. auf 5-Rappen gerundet
 		$y = $this->pdf->GetY();
 		$this->pdf->Line(17, $y, 194, $y);
@@ -223,7 +222,7 @@ class indexpdf {
 		$this->pdf->Cell(10,4,'',0,0,'R');
 		$this->pdf->Cell(24,4,$this->CHF($total_teuerung),0,0,'R');
 		$this->pdf->Ln();
-		
+
 		// Total-Zeile gerundet auf volle Franken
 		$this->pdf->Cell(87,4,'Gesamttotal gerundet');
 		$this->pdf->Cell(25,4,$this->CHF(round($total)),0,0,'R');
@@ -235,12 +234,12 @@ class indexpdf {
 		$y = $this->pdf->GetY();
 		$this->pdf->Line(17, $y, 194, $y);
 	}
-	
+
 	private function Indexe() {
 		return array(
 			1 => array('von'=>'1995-01-01','bis'=>'1998-09-30', 'titel'=>'NEAT Teuerungsindex',                                 'Basisindex'=>119.8),
 			2 => array('von'=>'1998-10-01','bis'=>'2005-03-31', 'titel'=>'Schweizer Baupreisindex - Tiefbau - Nordwestschweiz', 'Basisindex'=>98.0),
-			3 => array('von'=>'2005-04-01','bis'=>'2014-12-31', 'titel'=>'Schweizer Baupreisindex - Tiefbau - Nordwestschweiz', 'Basisindex'=>100.0),
+			3 => array('von'=>'2005-04-01','bis'=>'2099-12-31', 'titel'=>'Schweizer Baupreisindex - Tiefbau - Nordwestschweiz', 'Basisindex'=>100.0),
 		);
 	}
 
@@ -287,7 +286,7 @@ class indexpdf {
     }
 
 	/*
-	 * erkennt, ob eine neue Periode kommt
+	 * prüft, ob eine neue Periode kommt
 	 */
 	private function is_new_periode($datum) {
 		$astraperiode = $this->Perioden();
@@ -314,19 +313,22 @@ class indexpdf {
 
 	/*
 	 * wandelt ein MYSQL Datum in das deutsche Format um
+	 * "YYYY-mm-dd" > "dd.mm.YYYY"
 	 */
 	private function DateSql2de($date) {
 		list($year,$month,$day) = explode('-',$date);
 		return $day.'.'.$month.'.'.$year;
 	}
-	
+
 	/*
 	 * kürzt einen String auf $len
+	 * @param string $string String welcher gekrzt werden soll
+	 * @param integer $len länge, auf welche $string gekürzt werden soll, default = 55
 	 */
 	private function cut($string, $len=55) {
 		return (strlen($string)>$len) ? substr($string,0,$len-3).'...':$string;
 	}
-	
+
 }
 
 /*
