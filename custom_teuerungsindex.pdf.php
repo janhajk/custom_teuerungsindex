@@ -40,11 +40,6 @@ class indexpdf {
 
 		// neues PDF Objekt anlegen
 		$this->pdf = new teuerungsindex_PDF('P','mm','A4');
-		$this->pdf->getAliasNbPages();  // Muss aufgerufen werden, damit Seitennummerierung erfolgt
-		$this->pdf->SetFont('helvetica','',7);
-		$this->pdf->SetFillColor(255,255,255);
-		$this->pdf->SetMargins(15,110,15);	// Ränder
-		$this->pdf->AddPage(); // erste Seite anlegen
 
 	}
 
