@@ -39,7 +39,7 @@ class indexpdf {
 		$this->stichtag = $data['stichtag'];
 
 		// neues PDF Objekt anlegen
-		$this->pdf = new TCPDF('P','mm','A4');
+		$this->pdf = new teuerungsindex_PDF('P','mm','A4');
 		$this->pdf->getAliasNbPages();  // Muss aufgerufen werden, damit Seitennummerierung erfolgt
 		$this->pdf->SetFont('helvetica','',7);
 		$this->pdf->SetFillColor(255,255,255);
@@ -339,7 +339,7 @@ class indexpdf {
 class teuerungsindex_PDF extends TCPDF {
 	// Kopfzeile
 	function header() {
-		$this->Image((dirname(__FILE__)).'/chlogo.png',17,5,70,0,'PNG','','T',true);
+		//$this->Image((dirname(__FILE__)).'/chlogo.png',17,5,70,0,'PNG','','T',true);
 		$this->SetFont('helvetica','B',14);$this->Text(17,30,'Infrastrukturfonds');
 		$this->SetFont('helvetica','B',11);$this->Text(17,39,'Berechnung / Nachweis Vergaben + Vorvertragssteuerung');
 		$this->SetFont('helvetica','B',11);$this->Text(17,47,'Kennzahl KC1 / KC2 aus Kennzahlenreporting Teil C Kostencontrolling');
