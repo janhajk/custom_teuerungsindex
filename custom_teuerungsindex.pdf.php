@@ -40,7 +40,7 @@ class indexpdf {
 
 		// neues PDF Objekt anlegen
 		$this->pdf = new teuerungsindex_PDF('P','mm','A4');
-		$this->pdf->AliasNbPages();  // Muss aufgerufen werden, damit Seitennummerierung erfolgt
+		$this->pdf->getAliasNbPages();  // Muss aufgerufen werden, damit Seitennummerierung erfolgt
 		$this->pdf->SetFont('helvetica','',7);
 		$this->pdf->SetFillColor(255,255,255);
 		$this->pdf->SetMargins(15,110,15);	// Ränder
@@ -113,7 +113,7 @@ class indexpdf {
 		$this->pdf->Cell(50,5,'KC1: '.$this->CHF($ttotal));$this->pdf->Ln();
 		$ttotal = 0;
 		foreach ($this->summe_periode_teuerung as $sum) {
-			$ttotal += $sum;	
+			$ttotal += $sum;
 		}
 		$this->pdf->Cell(50,5,'KC2: '.$this->CHF($ttotal));$this->pdf->Ln();
 
@@ -134,7 +134,7 @@ class indexpdf {
 		// Bereits geschrieben Header-Bytes löschen
 		ob_clean();
 		// PDF ausgeben
-		$this->pdf->Output('Do_'.date("Y-m-d_H-i",time()).'.pdf','D');
+		$this->pdf->Output('Do_'.date('Y-m-d_H-i',time()).'.pdf','D');
 		// Script abbrechen, damit Drupal nicht versucht weiteren Code auszuführen
 		$GLOBALS['devel_shutdown'] = FALSE;
 		module_invoke_all('exit');
