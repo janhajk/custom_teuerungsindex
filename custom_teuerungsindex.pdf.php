@@ -133,8 +133,9 @@ class indexpdf {
 	public function Output() {
 		// PDF ausgeben
 		$this->pdf->Output('Do_'.date('Y-m-d_H-i',time()).'.pdf','D');
+
 		// Script abbrechen, damit Drupal nicht versucht weiteren Code auszuführen
-		$GLOBALS['devel_shutdown'] = FALSE;
+		$GLOBALS['devel_shutdown'] = FALSE; // Verhindert bei aktiviertem devel-modul das Einfügen einer Fusszeile
 		module_invoke_all('exit');
 		exit();
 	}
