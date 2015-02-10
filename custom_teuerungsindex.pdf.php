@@ -273,17 +273,19 @@ class indexpdf {
 			24 => array('von'=>'2008-10-01', 'bis'=>'2009-03-31', 'index'=>113.06, 'periode'=>3),
 			25 => array('von'=>'2009-04-01', 'bis'=>'2009-09-30', 'index'=>107.76, 'periode'=>3),
 			26 => array('von'=>'2009-10-01', 'bis'=>'2010-03-31', 'index'=>106.02, 'periode'=>3),
-			27 => array('von'=>'2010-04-01', 'bis'=>'2010-09-30', 'index'=>106.02, 'periode'=>3),
-      28 => array('von'=>'2010-10-01', 'bis'=>'2011-03-31', 'index'=>109.29, 'periode'=>3),
-      29 => array('von'=>'2011-04-01', 'bis'=>'2011-09-30', 'index'=>108.47, 'periode'=>3),
-      30 => array('von'=>'2011-10-01', 'bis'=>'2012-03-31', 'index'=>108.27, 'periode'=>3),
-      31 => array('von'=>'2012-04-01', 'bis'=>'2012-09-30', 'index'=>109.39, 'periode'=>3),
-      32 => array('von'=>'2012-10-01', 'bis'=>'2013-03-31', 'index'=>111.63, 'periode'=>3),
-      33 => array('von'=>'2013-04-01', 'bis'=>'2013-09-30', 'index'=>112.45, 'periode'=>3),
-      34 => array('von'=>'2013-10-01', 'bis'=>'2014-12-31', 'index'=>114.08, 'periode'=>3),
-		);
-	}
-	
+            27 => array('von'=>'2010-04-01', 'bis'=>'2010-09-30', 'index'=>106.02, 'periode'=>3),
+            28 => array('von'=>'2010-10-01', 'bis'=>'2011-03-31', 'index'=>109.29, 'periode'=>3),
+            29 => array('von'=>'2011-04-01', 'bis'=>'2011-09-30', 'index'=>108.47, 'periode'=>3),
+            30 => array('von'=>'2011-10-01', 'bis'=>'2012-03-31', 'index'=>108.27, 'periode'=>3),
+            31 => array('von'=>'2012-04-01', 'bis'=>'2012-09-30', 'index'=>109.39, 'periode'=>3),
+            32 => array('von'=>'2012-10-01', 'bis'=>'2013-03-31', 'index'=>111.63, 'periode'=>3),
+            33 => array('von'=>'2013-04-01', 'bis'=>'2013-09-30', 'index'=>112.45, 'periode'=>3),
+            34 => array('von'=>'2013-10-01', 'bis'=>'2014-03-31', 'index'=>114.08, 'periode'=>3),
+            35 => array('von'=>'2014-04-01', 'bis'=>'2014-09-30', 'index'=>116.22, 'periode'=>3),
+            36 => array('von'=>'2014-10-01', 'bis'=>'2015-12-31', 'index'=>117.45, 'periode'=>3),
+        );
+    }
+
 	/*
 	 * erkennt, ob eine neue Periode kommt
 	 */
@@ -296,7 +298,7 @@ class indexpdf {
 			return false;
 		}
 	}
-	
+
 	/*
 	 * Formatiert ein Float Wert als CHF-Währung
 	 * Rundet auf 5-er Rappen, zwei Nachkommastellen
@@ -304,12 +306,12 @@ class indexpdf {
 	private function CHF($number) {
 		return number_format($this->Rappen($number),2,".","'");
 	}
-	
+
 	// Rundet eine Zahl auf 5-er Rappen
 	private function Rappen($number) {
 		return (float) round($number*100/5)*5/100;
 	}
-	
+
 	/*
 	 * wandelt ein MYSQL Datum in das deutsche Format um
 	 */
