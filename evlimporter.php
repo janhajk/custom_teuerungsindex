@@ -208,8 +208,8 @@ class EVL {
         );
 
         $this->data = array('v'=>$k,'stichtag'=>$stichtag, 'rechnungstotal'=>$rechnungstotal, 'bonus'=>$bonus);
-        //unset($this->data['v']); print "<pre>"; print_r($this->data); print '</pre>'; exit();
-        print '<pre>'.print_r($this->data,1).'</pre>'; exit();
+        //unset($this->data['v']); print '<pre>'.print_r($this->data,1).'</pre>'; exit();
+        //print '<pre>'.print_r($this->data,1).'</pre>'; exit();
         return $this->data;
 	}
 
