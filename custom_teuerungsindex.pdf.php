@@ -46,14 +46,6 @@ class indexpdf {
 		$this->pdf->SetMargins(15,110,15);	// Ränder
 		$this->pdf->AddPage(); // erste Seite anlegen
 
-		// Index und Perioden Daten
-		$astraINDEXE = $this->Indexe();
-		$astraperiode = $this->Perioden();
-
-		$this->cur_periode = 0;
-		$cur_page = 0;
-		// Durch alle HV gehen
-		
 	}
 
 	/*
