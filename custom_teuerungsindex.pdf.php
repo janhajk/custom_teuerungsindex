@@ -380,6 +380,6 @@ class teuerungsindex_PDF extends TCPDF {
 		// Druckdatum, Seite von / bis
 		$this->SetFont('helvetica','',8);
         $this->SetXY(107,286);
-        $this->MultiCell(88,5,'Druckdatum: '.date('d.m.Y',time()).'          Seite '.$this->PageNo().'/{nb}',0,'R');
+        $this->MultiCell(88,5,'Druckdatum: '.date('d.m.Y',time()).'          Seite '.$this->PageNo().'/'.$this->getAliasNbPages(),0,'R');
 	}
 }
